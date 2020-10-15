@@ -37,7 +37,6 @@ fi
 
 log "Creating minecraft user"
 adduser --system --home $BASE_DIR --group minecraft
-chown -R minecraft.minecraft $BASE_DIR
 
 if [ -f "$FILE_DIR/assets/minecraft.service" ]; then
     log "Creating systemd service minecraft@server"
@@ -48,6 +47,7 @@ fi
 
 log "Copying configuration files"
 cp -r $FILE_DIR/config/. $BASE_DIR/server
+chown -R minecraft.minecraft $BASE_DIR
 
 cd $OLDPWD
 log "Done."
