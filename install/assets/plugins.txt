@@ -1,0 +1,5 @@
+https://media.forgecdn.net/files/3074/594/Multiverse-Core-4.2.2.jar
+
+https://media.forgecdn.net/files/3074/603/Multiverse-Portals-4.2.0.jar
+
+https://media.forgecdn.net/files/3074/605/Multiverse-SignPortals-4.2.0.jar 

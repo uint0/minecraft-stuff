@@ -1,0 +1,29 @@
+[Unit]
+Description=Minecraft Server %i
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/mc/%i
+PrivateUsers=true 
+User=minecraft
+Group=minecraft
+ProtectSystem=full 
+ProtectHome=true 
+ProtectKernelTunables=true 
+ProtectKernelModules=true 
+ProtectControlGroups=true 
+
+ExecStart=/bin/sh -c '/usr/bin/screen -DmS mc-%i /usr/bin/java -server -jar $(ls -v | grep -i "craftbukkit.*jar" | head -n 1) nogui'
+
+ExecReload=/usr/bin/screen -p 0 -S mc-%i -X eval 'stuff "reload"\\015'
+
+ExecStop=/usr/bin/screen -p 0 -S mc-%i -X eval 'stuff "say SERVER SHUTTING DOWN. Saving map..."\\015'
+ExecStop=/usr/bin/screen -p 0 -S mc-%i -X eval 'stuff "save-all"\\015'
+ExecStop=/usr/bin/screen -p 0 -S mc-%i -X eval 'stuff "stop"\\015'
+ExecStop=/bin/sleep 10
+
+Restart=on-failure
+RestartSec=60s
+
+[Install]
+WantedBy=multi-user.target
