@@ -1,5 +1,5 @@
 import re
-import re_util
+import preprocessors.re_util as re_util
 import typing
 import dataclasses
 
