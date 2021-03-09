@@ -11,7 +11,7 @@ def process_base_log_stream(stream: io.TextIOWrapper) -> typing.Iterable[dict]:
         matches = re.match(matcher, line.strip())
 
         if matches is None:
-            print('[WARN] Did not find a match on line, may be a multiline log which is currently unsupported')
+            #print('[WARN] Did not find a match on line, may be a multiline log which is currently unsupported')
             continue
 
         yield matches.groupdict()
