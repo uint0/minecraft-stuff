@@ -27,10 +27,12 @@ def process_logs(
     if not os.path.isdir(logs_loc):
         raise ValueError("Provided location isn't a directory")
 
+    processor_requires_filename = [PROCESSOR_FABRIC]
+
     logs = os.listdir(logs_loc)
 
     for logfile in sorted(logs, key=ordering_key):
-        if not is_valid_log_filename(logfile):
+        if processor in processor_requires_filename and not is_valid_log_filename(logfile):
             print(f"{logfile} is not a valid logfile name, skipping...")
             continue
 

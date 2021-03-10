@@ -10,4 +10,4 @@ for event in preprocessor.process_logs(sys.argv[1], processor=preprocessor.PROCE
         binned_times[util.utc_to_local(event.time).hour] += 1
 
 for i, c in enumerate(binned_times):
-    print(f'{str(i).zfill(2)}:00 - {str(i).zfill(2)}:59 ->\t{c} login')
+    print(f'{str(i).zfill(2)}:00 - {str(i).zfill(2)}:59 ->\t{c} logins')
