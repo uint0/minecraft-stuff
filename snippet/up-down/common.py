@@ -16,13 +16,13 @@ class InstanceManager:
         self._client = azure.mgmt.compute.ComputeManagementClient(creds, subscription_id)
 
     def start(self):
-        return self._client.virtual_machines.start(
+        return self._client.virtual_machines.begin_start(
             self._group_name,
             self._vm_name
         )
     
     def stop(self):
-        return self._client.virtual_machines.power_off(
+        return self._client.virtual_machines.begin_power_off(
             self._group_name,
             self._vm_name
         )
