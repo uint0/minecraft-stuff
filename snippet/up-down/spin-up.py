@@ -6,3 +6,6 @@ def main():
         vm_name=config.VM_NAME
     )
     manager.start()
+
+if __name__ == '__main__':
+    print(main())

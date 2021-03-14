@@ -17,10 +17,15 @@ def main():
 
     # If there are online players, fail
     if n_online != 0:
-        return fail()
+        return False
     
     manager = common.InstanceManager(
         group_name=config.GROUP_NAME,
         vm_name=config.VM_NAME
     )
     manager.stop()
+
+    return True
+
+if __name__ == '__main__':
+    print(main())

@@ -1,8 +1,9 @@
+import config
 import azure.identity
 import azure.mgmt.compute
 
 def get_credentials():
-    subscription_id = os.environ['AZURE_SUBSCRIPTION_ID']
+    subscription_id = config.AZURE_SUBSCRIPTION_ID
     credentials = azure.identity.DefaultAzureCredential()
     return credentials, subscription_id
 
