@@ -22,7 +22,7 @@ class InstanceManager:
         )
     
     def stop(self):
-        return self._client.virtual_machines.begin_power_off(
+        return self._client.virtual_machines.begin_deallocate(
             self._group_name,
             self._vm_name
         )
