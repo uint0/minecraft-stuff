@@ -1,0 +1,113 @@
+swagger: "3.0.0"
+info:
+  version: "0.0.1"
+  title: Phantasma
+  description: ""
+
+paths:
+  /meta/version:
+    get:
+      summary: "Get the version of phantasma and minecraft running"
+      responses:
+        200:
+          description: Version Info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionResponse"
+      security:
+        - access: ["meta:version:read"]
+  
+  /minecraft/list:
+    get:
+      summary: "List the players online"
+      responses:
+        200:
+          description: Online players
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerList"
+      security:
+        - access: ["minecraft:list:read"]
+      
+  /minecraft/whitelist:
+    get:
+      summary: "Get a list of whitelisted players"
+      responses:
+        200:
+          description: Whitelisted Players
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerList"
+      security:
+        - access: ["minecraft:whitelist:read"]
+    put:
+      summary: "Add a new player to the whitelist"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlayerName"
+      responses:
+        200:
+          description: Newly Whitelisted Player
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerName"
+        303:
+          description: Player already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerName"
+      security:
+        - access: ["minecraft:whitelist:write"]
+    delete:
+      summary: "Remove a player from the whitelist"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlayerName"
+      responses:
+        200:
+          description: Deleted player
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerName"
+        404:
+          description: No such player exists 
+      security:
+        - access: ["minecraft:whitelist:write"]
+      
+
+components:
+  schemas:
+    VersionResponse:
+      type: object
+      properties: 
+        phantasma:
+          type: object
+          properties: 
+            version:
+              type: integer
+        minecraft:
+          type: object
+          properties: 
+            version:
+              type: string
+            servertype:
+              type: string
+    PlayerName:
+      type: string
+      description: The username of the player
+    PlayerList:
+      type: array
+      items: 
+        type: PlayerName
