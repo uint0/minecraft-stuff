@@ -17,7 +17,7 @@ class AsyncCarpetRCONClient(AsyncRCONClient):
         return matches
 
     async def mspt(self):
-        resp = await self.send_cmd('mspt mspt')
+        resp = await self.send_cmd('mspt')
         if resp.startswith('Unknown or incomplete command'):
             # TODO: raise unimplemented?
             return None

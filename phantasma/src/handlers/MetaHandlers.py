@@ -10,7 +10,7 @@ class MetaHandlers(handlers.BaseHandler.BaseHandler):
     
     def routes(self):
         return route.Route.RouteSet({
-            '/version': {
+            '/info': {
                 'get': {
                     'handler': self.version,
                     'perms': []
@@ -18,5 +18,13 @@ class MetaHandlers(handlers.BaseHandler.BaseHandler):
             }
         }, prefix='/meta')
     
-    async def version(self, request):
-        return web.json_response({'path': 'version'})
+    async def info(self, request):
+        return web.json_response({
+            'server': {
+                'version': '1.16.4',
+                'server': 'fabric/carpet'
+            },
+            'phantasma': {
+                'version': '0.0.1'
+            }
+        })
