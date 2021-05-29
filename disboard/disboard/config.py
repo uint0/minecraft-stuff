@@ -26,8 +26,8 @@ class _ServerConfig:
             }
 
             for alias in server.get('aliases', []):
-                new_alias_map[alias] = server['name']
-            new_alias_map[server['name']] = server['name']
+                new_alias_map[alias.lower()] = server['name']
+            new_alias_map[server['name'].lower()] = server['name']
 
             new_config_map[server['name']] = server_def
 
@@ -37,7 +37,7 @@ class _ServerConfig:
 
     def get_server(self, name):
         try:
-            server_name = self._alias_map[name]
+            server_name = self._alias_map[name.lower()]
             return self._config[server_name]
         except KeyError:
             return None

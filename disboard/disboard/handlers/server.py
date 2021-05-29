@@ -59,7 +59,7 @@ def requires_perm(perm):
     def decorator(func):
         def wrapper(self, *args, **kwargs):
             if perm not in self._perms:
-                raise ServerForbiddenException(f"Required perm {perm} was not in allowed perms")
+                raise ServerForbiddenException(f"Required perm {perm} was not in found in allowed perms for this server")
             return func(self, *args, **kwargs)
         return wrapper
     return decorator
