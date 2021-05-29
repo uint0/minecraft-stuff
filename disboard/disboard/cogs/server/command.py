@@ -7,9 +7,8 @@ import handlers.server as server_handler
 import config
 
 
-NO_SUCH_SERVER_MSG = f"""
-No such server. Find available servers with !server list
-""".strip()
+NO_SUCH_SERVER_MSG = "No such server. Find available servers with !server list"
+USAGE_MSG = "Usage: !server <status|start|deallocate|metrics|list|help> [server_name]"
 
 
 def get_status_color(status_code):
@@ -28,7 +27,7 @@ class ServerCommand(commands.Cog):
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
     async def server(self, ctx):
         if ctx.invoked_subcommand is None:
-            await ctx.send(f"Usage: !server <status|start|stop|metrics|list|help> [server_name]")
+            await ctx.send(USAGE_MSG)
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
@@ -63,16 +62,18 @@ class ServerCommand(commands.Cog):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
         
-        await ctx.send("Not Implemented Yet D:")
+        server.start()
+        await ctx.send("Starting Server...")
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
     @deco.raises_exception(server_handler.ServerForbiddenException)
-    async def stop(self, ctx, server: converter.ServerConverter):
+    async def deallocate(self, ctx, server: converter.ServerConverter):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
         
-        await ctx.send("Not Implemented Yet D:")
+        server.stop()
+        await ctx.send("Deallocating Server...")
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
@@ -91,4 +92,4 @@ class ServerCommand(commands.Cog):
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
     async def help(self, ctx):
-        await ctx.send(f"Usage: !server <status|start|stop|metrics|list|help> [server_name]")
+        await ctx.send(USAGE_MSG)
