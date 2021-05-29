@@ -7,7 +7,7 @@ import azure.mgmt.compute
 import config
 
 
-ServerStatus = namedtuple('ServerStatus', ['status_code', 'status_name', 'uptime'])
+ServerStatus = namedtuple('ServerStatus', ['status_code', 'status_name', 'status_time'])
 ServerNames  = namedtuple('ServerNames', ['name', 'group'])
 
 
@@ -109,7 +109,7 @@ class Server:
         return ServerStatus(
             status_code=power_status.code,
             status_name=power_status.display_status,
-            uptime=dt.datetime.now(dt.timezone.utc) - provision_status.time
+            status_time=dt.datetime.now(dt.timezone.utc) - provision_status.time
         )
     
     @requires_perm('power')
