@@ -109,13 +109,13 @@ class Server:
         return ServerStatus(
             status_code=power_status.code,
             status_name=power_status.display_status,
-            status_time=dt.datetime.now(dt.timezone.utc) - provision_status.time
+            status_time=dt.datetime.now(dt.timezone.utc) - provision_status.time if provision_status.time else None
         )
     
     @requires_perm('power')
     def start(self):
         return self._manager.start()
     
-    @requires_perm('stop')
+    @requires_perm('power')
     def stop(self):
         return self._manager.stop()

@@ -45,10 +45,26 @@ class ServerCommand(commands.Cog):
         embed.set_author(name="Azure Compute")
         embed.set_thumbnail(url="https://symbols.getvecta.com/stencil_27/102_vm-symbol.3da37253c9.png")
 
-        embed.add_field(name="Status",      value=status.status_name,                        inline=True)
-        embed.add_field(name="Status Time", value=str(status.status_time).rsplit('.', 1)[0], inline=True)
-        embed.add_field(name="Game",        value=server.meta.get('game'),                   inline=True)
-        embed.add_field(name="Owner",       value=', '.join(server.meta.get('owner')),       inline=True)
+        embed.add_field(
+            name="Status",
+            value=status.status_name,
+            inline=True
+        )
+        embed.add_field(
+            name="Status Time",
+            value=str(status.status_time).rsplit('.', 1)[0] if status.status_time is not None else '-',
+            inline=True
+        )
+        embed.add_field(
+            name="Game",
+            value=server.meta.get('game'),
+            inline=True
+        )
+        embed.add_field(
+            name="Owner",
+            value=', '.join(server.meta.get('owner')),
+            inline=True
+        )
     
         embed.set_footer(text=f"!server status {server.called_name}")
         
