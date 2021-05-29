@@ -54,6 +54,6 @@ class _DiscordConfig:
     DISCORD_BOT_TOKEN     = os.environ['DISCORD_BOT_TOKEN']
     DISCORD_CHANNEL_AZURE = os.environ['DISCORD_CHANNEL_AZURE']
 
-server  = _ServerConfig('../config/servers.json')
+server  = _ServerConfig(os.path.join(os.environ.get('DISBOARD_CONF_DIR', '../config'), 'servers.json'))
 azure   = _AzureConfig()
 discord = _DiscordConfig()
