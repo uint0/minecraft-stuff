@@ -1,3 +1,9 @@
 # Disboard
 
-Get minecraft server metadata and activity using server list ping packets.
+Manage azure servers.
+
+## Features
+ - Can spin up / down servers
+ - Can report server status and metrics
+ - Can show costs
+ - Can monitor games
