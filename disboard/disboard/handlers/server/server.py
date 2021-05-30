@@ -1,65 +1,21 @@
 from collections import namedtuple
 import datetime as dt
 
-import azure.identity
-import azure.mgmt.compute
-
 import config
-
+import handlers.server.exceptions as exceptions
+import handlers.server.ServerManager as ServerManager
 
 ServerStatus = namedtuple('ServerStatus', ['status_code', 'status_name', 'status_time'])
 ServerNames  = namedtuple('ServerNames', ['name', 'group'])
 
 
-def get_credentials():
-    subscription_id = config.azure.AZURE_SUBSCRIPTION_ID
-    credentials = azure.identity.DefaultAzureCredential()
-    return credentials, subscription_id
-
-
-class ServerManager:
-    def __init__(self, vm_name, group_name):
-        self._group_name = group_name
-        self._vm_name    = vm_name
-
-        creds, subscription_id = get_credentials()
-        self._client = azure.mgmt.compute.ComputeManagementClient(creds, subscription_id)
-
-    def start(self):
-        return self._client.virtual_machines.begin_start(
-            self._group_name,
-            self._vm_name
-        )
-
-    def stop(self):
-        return self._client.virtual_machines.begin_deallocate(
-            self._group_name,
-            self._vm_name
-        )
-    
-    def get_vm_instance_view(self):
-        return self._client.virtual_machines.instance_view(
-            self._group_name,
-            self._vm_name
-        )
-    
-
-    @staticmethod
-    def wait(self, waiter):
-        return waiter.wait()
-
-
-class ServerForbiddenException(Exception):
-    """ Raised when no the requester does not have perms """
-
-class ServerNotConfiguredException(Exception):
-    """ Raised when a server cannot be found in config """
-
 def requires_perm(perm):
     def decorator(func):
         def wrapper(self, *args, **kwargs):
             if perm not in self._perms:
-                raise ServerForbiddenException(f"Required perm {perm} was not in found in allowed perms for this server")
+                raise exceptions.ServerForbiddenException(
+                    f"Required perm {perm} was not in found in allowed perms for this server"
+                )
             return func(self, *args, **kwargs)
         return wrapper
     return decorator
@@ -69,7 +25,7 @@ class Server:
     def __init__(self, vm_name):
         server_info = config.server.get_server(vm_name)
         if server_info is None:
-            raise ServerNotConfiguredException(f"Could not find {vm_name} or alias")
+            raise exceptions.ServerNotConfiguredException(f"Could not find {vm_name} or alias")
 
         self._called_name = vm_name
         self._server_info = server_info
@@ -77,7 +33,7 @@ class Server:
         self._meta        = server_info['meta']
         self._perms       = set(server_info['perms'])
 
-        self._manager = ServerManager(self._resource['name'], self._resource['group'])
+        self._manager = ServerManager.ServerManager(self._resource['name'], self._resource['group'])
     
     @property
     def resource_names(self):

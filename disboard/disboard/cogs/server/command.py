@@ -3,7 +3,7 @@ import discord.ext.commands as commands
 
 import cogs.server.converter as converter
 import cogs.util.decorators as deco
-import handlers.server as server_handler
+import handlers.server.exceptions as server_exceptions
 import config
 
 
@@ -31,7 +31,7 @@ class ServerCommand(commands.Cog):
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
-    @deco.raises_exception(server_handler.ServerForbiddenException)
+    @deco.raises_exception(server_exceptions.ServerForbiddenException)
     async def status(self, ctx, server: converter.ServerConverter):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
@@ -73,7 +73,7 @@ class ServerCommand(commands.Cog):
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
-    @deco.raises_exception(server_handler.ServerForbiddenException)
+    @deco.raises_exception(server_exceptions.ServerForbiddenException)
     async def start(self, ctx, server: converter.ServerConverter):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
@@ -83,7 +83,7 @@ class ServerCommand(commands.Cog):
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
-    @deco.raises_exception(server_handler.ServerForbiddenException)
+    @deco.raises_exception(server_exceptions.ServerForbiddenException)
     async def deallocate(self, ctx, server: converter.ServerConverter):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
@@ -93,7 +93,7 @@ class ServerCommand(commands.Cog):
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
-    @deco.raises_exception(server_handler.ServerForbiddenException)
+    @deco.raises_exception(server_exceptions.ServerForbiddenException)
     async def metrics(self, ctx, server: converter.ServerConverter):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
