@@ -39,7 +39,7 @@ class ServerCommand(commands.Cog):
         status = server.get_status()
         embed = discord.Embed(
             title=server.name,
-            description=f"{server.resource_names.name}/{server.resource_names.group}",
+            description=f"{server.resource_names.group}/{server.resource_names.name}",
             color=get_status_color(status.status_code)
         )
         embed.set_author(name="Azure Compute")
