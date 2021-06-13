@@ -5,11 +5,13 @@ import cogs.server.converter as converter
 import cogs.util.decorators as deco
 import handlers.server.exceptions as server_exceptions
 import config
+import logging
 
 
 NO_SUCH_SERVER_MSG = "No such server. Find available servers with !server list"
 USAGE_MSG = "Usage: !server <status|start|deallocate|metrics|list|help> [server_name]"
 
+logger = logging.getLogger(__name__)
 
 def get_status_color(status_code):
     if status_code == "PowerState/deallocated":
@@ -35,7 +37,8 @@ class ServerCommand(commands.Cog):
     async def status(self, ctx, server: converter.ServerConverter):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
-        
+
+        logger.info("user %s:[%s] requested status for %s", ctx.message.author, ctx.message.author.id, server)
         status = server.get_status()
         embed = discord.Embed(
             title=server.name,
@@ -78,18 +81,18 @@ class ServerCommand(commands.Cog):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
         
-        server.start()
-        await ctx.send("Starting Server...")
+        logger.info("user %s:[%s] requested start for %s", ctx.message.author, ctx.message.author.id, server)
+        await server.start(await self._send_server_action(ctx, "Starting server {}...".format(server)))
 
-    @server.command()
+    @server.command(aliases=['stop'])
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
     @deco.raises_exception(server_exceptions.ServerForbiddenException)
     async def deallocate(self, ctx, server: converter.ServerConverter):
         if not server:
             return await ctx.send(NO_SUCH_SERVER_MSG)
         
-        server.stop()
-        await ctx.send("Deallocating Server...")
+        logger.info("user %s:[%s] requested deallocate for %s", ctx.message.author, ctx.message.author.id, server)
+        await server.stop(await self._send_server_action(ctx, "Deallocating server {}...".format(server)))
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
@@ -109,3 +112,13 @@ class ServerCommand(commands.Cog):
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
     async def help(self, ctx):
         await ctx.send(USAGE_MSG)
+
+    async def _send_server_action(self, ctx, message):
+        message = await ctx.reply(message)
+        async def handler(status):
+            if status:
+                return await message.reply("Operation completed successfully")
+            else:
+                return await message.reply("Operation completed unsuccessfully")
+
+        return handler
