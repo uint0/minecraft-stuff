@@ -28,7 +28,7 @@ class ServerManager:
             self._group_name,
             self._vm_name
         )
-    
+
     def get_vm_instance_view(self):
         return self._client.virtual_machines.instance_view(
             self._group_name,
