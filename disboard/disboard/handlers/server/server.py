@@ -2,7 +2,6 @@ from collections import namedtuple
 import datetime as dt
 import asyncio
 import logging
-import traceback
 
 import config
 import handlers.server.exceptions as exceptions
@@ -98,15 +97,15 @@ class Server:
                 elif current_status in TERMINAL_STATUSES:
                     return await handler(False)
         except:
-            logger.error("unexpected error when polling for status of server %s: %s", self, traceback.format_exc())
+            logger.exception("unexpected error when polling for status of server %s", self)
             return await handler(False)
 
     @requires_perm('power')
     async def start(self, handler):
-        asyncio.ensure_future(self._poll_for_status(SERVER_RUNNING, handler))
+        asyncio.create_task(self._poll_for_status(SERVER_RUNNING, handler))
         return self._manager.start()
     
     @requires_perm('power')
     async def stop(self, handler):
-        asyncio.ensure_future(self._poll_for_status(SERVER_DEALLOCATED, handler))
+        asyncio.create_task(self._poll_for_status(SERVER_DEALLOCATED, handler))
         return self._manager.stop()

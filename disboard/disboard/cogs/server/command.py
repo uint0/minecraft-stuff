@@ -82,7 +82,7 @@ class ServerCommand(commands.Cog):
             return await ctx.send(NO_SUCH_SERVER_MSG)
         
         logger.info("user %s:[%s] requested start for %s", ctx.message.author, ctx.message.author.id, server)
-        await server.start(await self._send_server_action(ctx, "Starting server {}...".format(server)))
+        await server.start(await self._send_server_action(ctx, f"Starting server {server}..."))
 
     @server.command(aliases=['stop'])
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
@@ -92,7 +92,7 @@ class ServerCommand(commands.Cog):
             return await ctx.send(NO_SUCH_SERVER_MSG)
         
         logger.info("user %s:[%s] requested deallocate for %s", ctx.message.author, ctx.message.author.id, server)
-        await server.stop(await self._send_server_action(ctx, "Deallocating server {}...".format(server)))
+        await server.stop(await self._send_server_action(ctx, f"Deallocating server {server}..."))
 
     @server.command()
     @deco.require_channel(config.discord.DISCORD_CHANNEL_AZURE)
